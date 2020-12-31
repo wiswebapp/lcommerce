@@ -6,6 +6,7 @@ use App\User;
 use Illuminate\Validation\Rule;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use App\Http\Requests\UserStoreRequest;
 use Illuminate\Support\Facades\Hash;
 
 class UserController extends Controller
@@ -31,17 +32,7 @@ class UserController extends Controller
         $data['pageTitle'] = "Add Register User";
         return view('admin.user.users_action')->with('data',$data);
     }
-    public function store_user(Request $request){
-        $request->validate([
-            'fname' => 'required|max:255|regex:/^[\pL\s\-]+$/u',
-            'lname' => 'required|max:255|regex:/^[\pL\s\-]+$/u',
-            'email' => [
-                            'required',Rule::unique('users','email'),'email:rfc'
-                        ],
-            'phone' => 'required|digits:10|integer',
-            'status' => 'required',
-            'password' => 'required|alpha_dash',
-        ]);        
+    public function store_user(UserStoreRequest $request){
         $user = new User();
         $input = $request->all();
         if($input['password'] == null){
@@ -58,16 +49,7 @@ class UserController extends Controller
         $data['pageTitle'] = "Edit Register User";
         return view('admin.user.users_action')->with('data',$data);
     }
-    public function update_user(Request $request,$id){
-        $request->validate([
-            'fname' => 'required|max:255|regex:/^[\pL\s\-]+$/u',
-            'lname' => 'required|max:255|regex:/^[\pL\s\-]+$/u',
-            'email' => [
-                            'required',Rule::unique('users','email')->ignore($id),'email:rfc'
-                        ],
-            'phone' => 'required|digits:10|integer',
-            'status' => 'required',
-        ]);        
+    public function update_user(UserStoreRequest $request,$id){
         $user = User::find($id);
         $input = $request->all();
         if($input['password'] == null){

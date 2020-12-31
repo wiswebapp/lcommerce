@@ -3,9 +3,11 @@
 namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
+use App\Notifications\UserRegister;
 use App\Providers\RouteServiceProvider;
 use App\User;
 use Illuminate\Foundation\Auth\RegistersUsers;
+use Illuminate\Notifications\Notifiable;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
 
@@ -22,7 +24,7 @@ class RegisterController extends Controller
     |
     */
 
-    use RegistersUsers;
+    use RegistersUsers,Notifiable;
 
     /**
      * Where to redirect users after registration.
@@ -72,6 +74,7 @@ class RegisterController extends Controller
             'password' => Hash::make($data['password']),
             'status' => 'Active'
         ]);
+        $userCreate->notify( new UserRegister($data) );
         return $userCreate;
     }
 }
