@@ -63,7 +63,7 @@
                 <div class="col-md-8">
                   <div class="form-group">
                       <label>Product Description</label>
-                      <textarea name="product_description" class="form-control {{ $errors->has('product_description') ? 'is-invalid' : '' }}" placeholder="Enter Description">{{old('product_description',$pageData->product_description)}}</textarea>
+                      <textarea name="product_description" class="form-control wysiwyg-ck {{ $errors->has('product_description') ? 'is-invalid' : '' }}" placeholder="Enter Description">{{old('product_description',$pageData->product_description)}}</textarea>
                   </div>
                 </div>  
                 

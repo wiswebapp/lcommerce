@@ -18,7 +18,13 @@ defined('ADMIN_PATH') or define('ADMIN_PATH', 'webadmin');
 
 Auth::routes();
 Route::get('/', 'HomeController@index')->name('home');
-
+/* for pages */
+Route::get('/{page}', 'PageController')
+->name('page')
+->where('page', 'about|privacy|terms');
+// Route::get('about', 'PageController@about')->name('about');
+// Route::get('terms', 'PageController@terms')->name('terms');
+// Route::get('privacy', 'PageController@privacy')->name('privacy');
 
 /*--------------------Admin Panel--------------------*/
 Route::get(ADMIN_PATH, 'Auth\admin\LoginController@showLoginForm');
@@ -51,6 +57,8 @@ Route::prefix(ADMIN_PATH)->middleware(['auth:admin'])->namespace('admin')->group
     $routeResource("product", "ProductController",'product');
     //Register Users
     $routeResource("user", "UserController",'user');
+    //CMS Pages
+    $routeResource("pages", "PagesController", 'pages');
 });
 
 ?>

@@ -57,9 +57,9 @@
             <a class="dropdown-item" href="checkout.html">Checkout</a>
         </div>
         </li>
-        <li class="nav-item"><a href="about.html" class="nav-link">About</a></li>
-        <li class="nav-item"><a href="blog.html" class="nav-link">Blog</a></li>
-        <li class="nav-item"><a href="contact.html" class="nav-link">Contact</a></li>
+        <li class="nav-item"><a href="{{ route('page','about') }}" class="nav-link">{{ __('About Us') }}</a></li>
+        <li class="nav-item"><a href="{{ route('page','terms') }}" class="nav-link">{{ __('Terms & Condition') }}</a></li>
+        <li class="nav-item"><a href="{{ route('page','privacy') }}" class="nav-link">{{ __('Privacy Policy') }}</a></li>
         <li class="nav-item cta cta-colored"><a href="cart.html" class="nav-link"><span class="icon-shopping_cart"></span>[0]</a></li>
 
         </ul>

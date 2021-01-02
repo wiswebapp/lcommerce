@@ -2,14 +2,14 @@
 
 namespace App\Http\Controllers\Auth;
 
-use App\Http\Controllers\Controller;
-use App\Notifications\UserRegister;
-use App\Providers\RouteServiceProvider;
+use Mail;
 use App\User;
-use Illuminate\Foundation\Auth\RegistersUsers;
-use Illuminate\Notifications\Notifiable;
 use Illuminate\Support\Facades\Hash;
+use App\Http\Controllers\Controller;
+use App\Providers\RouteServiceProvider;
+use Illuminate\Notifications\Notifiable;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Foundation\Auth\RegistersUsers;
 
 class RegisterController extends Controller
 {
@@ -67,14 +67,20 @@ class RegisterController extends Controller
      */
     protected function create(array $data)
     {
+        $useremail = $data['email'];
         $userCreate = User::create([
             'fname' => $data['fname'],
             'lname' => $data['lname'],
-            'email' => $data['email'],
+            'email' => $useremail,
             'password' => Hash::make($data['password']),
             'status' => 'Active'
         ]);
-        $userCreate->notify( new UserRegister($data) );
+
+        $subject = "Welcome to ". env('APP_NAME') ." !";
+        Mail::send('email.register_user', $data, function ($message) use ($useremail, $subject) {
+            $message->to($useremail)->subject($subject);
+        });
+
         return $userCreate;
     }
 }

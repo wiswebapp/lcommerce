@@ -43,7 +43,7 @@
             <h2 class="ftco-heading-2">Menu</h2>
             <ul class="list-unstyled">
                 <li><a href="#" class="py-2 d-block">Shop</a></li>
-                <li><a href="#" class="py-2 d-block">About</a></li>
+                <li><a href="{{route('page','about')}}" class="py-2 d-block">About</a></li>
                 <li><a href="#" class="py-2 d-block">Journal</a></li>
                 <li><a href="#" class="py-2 d-block">Contact Us</a></li>
             </ul>
@@ -56,8 +56,8 @@
                 <ul class="list-unstyled mr-l-5 pr-l-3 mr-4">
                     <li><a href="#" class="py-2 d-block">Shipping Information</a></li>
                     <li><a href="#" class="py-2 d-block">Returns &amp; Exchange</a></li>
-                    <li><a href="#" class="py-2 d-block">Terms &amp; Conditions</a></li>
-                    <li><a href="#" class="py-2 d-block">Privacy Policy</a></li>
+                    <li><a href="{{route('page','terms')}}" class="py-2 d-block">Terms &amp; Conditions</a></li>
+                    <li><a href="{{route('page','privacy')}}" class="py-2 d-block">Privacy Policy</a></li>
                 </ul>
                 <ul class="list-unstyled">
                     <li><a href="#" class="py-2 d-block">FAQs</a></li>

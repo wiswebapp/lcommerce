@@ -18,6 +18,7 @@ topbar.config({
 })();
 $(document).ready(function(){
 
-    topbar.hide();
+  topbar.hide();
+  $('.wysiwyg-ck').summernote();
 
 });
