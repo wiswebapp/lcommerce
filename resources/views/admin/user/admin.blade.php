@@ -1,7 +1,7 @@
 @php
-$routeUrl = route('admin.pages');
-$routeCreateUrl = route('admin.create_pages');
-$routeEditUrl = url(ADMIN_PATH.'/pages/edit/');
+$routeUrl = route('admin.admin');
+$routeCreateUrl = route('admin.create_admin');
+$routeEditUrl = url(ADMIN_PATH.'/admin/edit/');
 @endphp
 
 @section('title',$data['pageTitle'])
@@ -14,7 +14,11 @@ $routeEditUrl = url(ADMIN_PATH.'/pages/edit/');
         <div class="container-fluid">
             <div class="row mb-2">
                 <div class="col-sm-12">
-                    <h1>{{$data['pageTitle']}}</h1>
+                    <h1>{{$data['pageTitle']}}
+                    @can('Create Admin')
+                    <a href="{{$routeCreateUrl}}" class="float-right btn btn-sm btn-info"><i class="fa fa-plus fa-sm"></i> Add
+                        {{$data['pageTitle']}}</a>
+                    @endcan</h1>
                     <hr>
                 </div>
             </div>
@@ -62,8 +66,9 @@ $routeEditUrl = url(ADMIN_PATH.'/pages/edit/');
                                     <tr>
                                         <th><input type="checkbox"></th>
                                         <th>Created On</th>
-                                        <th>Page Name</th>
-                                        <th>Page Meta Keyword</th>
+                                        <th>Name</th>
+                                        <th>Email</th>
+                                        <th>Type</th>
                                         <th>Status</th>
                                         <th style="width: 15%">Action</th>
                                     </tr>
@@ -74,18 +79,19 @@ $routeEditUrl = url(ADMIN_PATH.'/pages/edit/');
                                     <tr>
                                         <td><input type="checkbox"></td>
                                         <td><?=toDate($pageData->created_at)?></td>
-                                        <td><?=$pageData->page_title?></td>
-                                        <td><?=$pageData->page_meta_keyword?></td>
+                                        <td><?=$pageData->name?></td>
+                                        <td><?=$pageData->email?></td>
+                                        <td><?=$pageData->getRoleNames()->toArray()[0]?></td>
                                         <td><?=$pageData->status?></td>
                                         <td>
-                                            @can('View Pages')
+                                            @can('View Admin')
                                             <a href="{{$routeEditUrl.'/'.$pageData->id}}"
                                                 class="btn btn-sm btn-success"><i class="fa fa-edit"></i> Edit</a>
                                             @endcan
-                                            @can('Delete Pages')
+                                            @if(Auth::User()->can('Delete Admin') && $pageData->getRoleNames()->toArray()[0] != "Super Admin")
                                             <span onclick="removeData('product',{{$pageData->id}})"
                                                 class="btn btn-sm btn-danger"><i class="fa fa-trash"></i> Delete</span>
-                                            @endcan
+                                            @endif
                                         </td>
                                     </tr>
                                     @endforeach

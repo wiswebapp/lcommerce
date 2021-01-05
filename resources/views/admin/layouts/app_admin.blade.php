@@ -14,6 +14,7 @@
     <link rel="stylesheet" href="{{adminAssets('plugins/overlayScrollbars/css/OverlayScrollbars.min.css')}}">
     <link rel="stylesheet" href="{{adminAssets('plugins/summernote/summernote-bs4.css')}}">
     <link rel="stylesheet" href="{{adminAssets('dist/css/adminlte.min.css')}}">
+    <link rel="stylesheet" href="{{adminAssets('plugins/select2/css/select2.min.css')}}">
     <!-- jQuery -->
     <script src="{{adminAssets('plugins/jquery/jquery.min.js')}}"></script>
     <link href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700" rel="stylesheet">
@@ -37,6 +38,7 @@
 <!-- overlayScrollbars -->
 <script src="{{adminAssets('plugins/overlayScrollbars/js/jquery.overlayScrollbars.min.js')}}"></script>
 <script src="{{adminAssets('plugins/topbar/topbar.min.js')}}"></script>
+<script src="{{adminAssets('plugins/select2/js/select2.min.js')}}"></script>
 <!-- PAGE PLUGINS -->
 <script src="{{adminAssets('plugins/jquery-mousewheel/jquery.mousewheel.js')}}"></script>
 <script src="{{adminAssets('plugins/summernote/summernote-bs4.min.js')}}"></script>

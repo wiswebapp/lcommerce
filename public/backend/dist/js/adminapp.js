@@ -16,9 +16,11 @@ topbar.config({
       if (topbar.progress('+.01') < 10) step()
     }, 16)
 })();
+
 $(document).ready(function(){
 
   topbar.hide();
   $('.wysiwyg-ck').summernote();
+  $('.select2').select2();
 
 });

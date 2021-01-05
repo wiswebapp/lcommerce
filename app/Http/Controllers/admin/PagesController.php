@@ -11,6 +11,7 @@ class PagesController extends Controller
 {
     public function pages()
     {
+        abort_unless($this->checkPermission('View Pages'), 403);
         $name = isset($_REQUEST['name']) ? trim($_REQUEST['name']) : "";
         $status = isset($_REQUEST['status']) ? trim($_REQUEST['status']) : "";
         $query = Pages::orderBy('id', 'desc');
@@ -28,6 +29,7 @@ class PagesController extends Controller
 
     public function create_pages()
     {
+        abort_unless($this->checkPermission('Create Pages'), 403);
         $data['action'] = "Add";
         $data['pageTitle'] = "Add Pages";
         return view('admin.pages.pages_action')->with('data', $data);
@@ -35,6 +37,7 @@ class PagesController extends Controller
 
     public function store_pages (Request $request)
     {
+        abort_unless($this->checkPermission('Create Pages'), 403);
        $validated = $request->validate([
             'page_title' => 'required',
             'page_description' => 'required',
@@ -64,6 +67,7 @@ class PagesController extends Controller
 
     public function edit_pages($id)
     {
+        abort_unless($this->checkPermission('Edit Pages'), 403);
         $data['action'] = "Edit";
         $data['pageData'] = Pages::find($id);
         $data['pageTitle'] = "Edit Pages";
@@ -72,6 +76,7 @@ class PagesController extends Controller
 
     public function update_pages($id, Request $request)
     {
+        abort_unless($this->checkPermission('Edit Pages'), 403);
         $validated = $request->validate([
             'page_title' => 'required',
             'page_description' => 'required',

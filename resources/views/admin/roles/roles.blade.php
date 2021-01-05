@@ -1,10 +1,10 @@
 @php
-$routeUrl = route('admin.pages');
-$routeCreateUrl = route('admin.create_pages');
-$routeEditUrl = url(ADMIN_PATH.'/pages/edit/');
+$routeUrl = route('admin.roles');
+$routeCreateUrl = route('admin.create_roles');
+$routeEditUrl = url(ADMIN_PATH.'/roles/edit/');
 @endphp
 
-@section('title',$data['pageTitle'])
+@section('title','Admin roles')
 
 @extends('admin.layouts.app_admin')
 
@@ -14,7 +14,8 @@ $routeEditUrl = url(ADMIN_PATH.'/pages/edit/');
         <div class="container-fluid">
             <div class="row mb-2">
                 <div class="col-sm-12">
-                    <h1>{{$data['pageTitle']}}</h1>
+                    <h1>{{$data['pageTitle']}} <a href="{{$routeCreateUrl}}" class="float-right btn btn-sm btn-info"><i
+                                class="fa fa-plus fa-sm"></i> Add {{$data['pageTitle']}}</a></h1>
                     <hr>
                 </div>
             </div>
@@ -52,19 +53,21 @@ $routeEditUrl = url(ADMIN_PATH.'/pages/edit/');
                                         <button type="submit" class="btn btn-default">Filter</button>
                                         <a href="{{$routeUrl}}" class="btn btn-default">Reset</a>
                                     </div>
+                                    <div class="col-5">
+                                        {{-- <a href="{{$routeCreateUrl}}" class="btn btn-default" style="float:
+                                        right">Create Page</a> --}}
+                                    </div>
                                 </div>
                             </form>
                         </div>
                         <!-- /.card-header -->
-                        <div class="card-body table-responsive p-0">
+                        <div class="card-body table-bodered table-responsive p-0">
                             <table class="table table-bordered text-nowrap">
                                 <thead>
                                     <tr>
                                         <th><input type="checkbox"></th>
-                                        <th>Created On</th>
-                                        <th>Page Name</th>
-                                        <th>Page Meta Keyword</th>
-                                        <th>Status</th>
+                                        <th>Role Name</th>
+                                        <th>Permissions</th>
                                         <th style="width: 15%">Action</th>
                                     </tr>
                                 </thead>
@@ -73,19 +76,17 @@ $routeEditUrl = url(ADMIN_PATH.'/pages/edit/');
                                     @foreach($data['pageData'] as $pageData)
                                     <tr>
                                         <td><input type="checkbox"></td>
-                                        <td><?=toDate($pageData->created_at)?></td>
-                                        <td><?=$pageData->page_title?></td>
-                                        <td><?=$pageData->page_meta_keyword?></td>
-                                        <td><?=$pageData->status?></td>
+                                        <td><?=$pageData->name?></td>
                                         <td>
-                                            @can('View Pages')
+                                            @foreach ($pageData->permissions as $item)
+                                                <span class="badge badge-info">{{$item->name}}</span>
+                                            @endforeach
+                                        </td>
+                                        <td>
                                             <a href="{{$routeEditUrl.'/'.$pageData->id}}"
                                                 class="btn btn-sm btn-success"><i class="fa fa-edit"></i> Edit</a>
-                                            @endcan
-                                            @can('Delete Pages')
-                                            <span onclick="removeData('product',{{$pageData->id}})"
+                                            <span onclick="removeData('category',{{$pageData->id}})"
                                                 class="btn btn-sm btn-danger"><i class="fa fa-trash"></i> Delete</span>
-                                            @endcan
                                         </td>
                                     </tr>
                                     @endforeach
@@ -96,11 +97,6 @@ $routeEditUrl = url(ADMIN_PATH.'/pages/edit/');
                                     @endif
                                 </tbody>
                             </table>
-                        </div>
-                        <div class="pull-right">
-                            @if (count($data['pageData']) > 0)
-                            {{$data['pageData']->links('pagination::bootstrap-4')}}
-                            @endif
                         </div>
                     </div>
                 </div>

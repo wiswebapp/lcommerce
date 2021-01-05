@@ -9,12 +9,9 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 
 class ProductController extends Controller
-{
-    public function __construct(){
-        $this->middleware('auth:admin');
-    }
-    
+{    
     public function product(){
+        abort_unless($this->checkPermission('View Product'), 403);
         $name = isset($_REQUEST['name']) ? trim($_REQUEST['name']) : "";
         $status = isset($_REQUEST['status']) ? trim($_REQUEST['status']) : "";
         $query = Product::whereNull('deleted_at')->orderBy('id', 'desc');
@@ -31,6 +28,7 @@ class ProductController extends Controller
     }
 
     public function create_product(){
+        abort_unless($this->checkPermission('Create Product'), 403);
         $data['action'] = "Add";        
         $data['pageTitle'] = "Add Catgory";
         $data['pageData']['category'] = Builder::getCategoryData();
@@ -38,6 +36,7 @@ class ProductController extends Controller
     }
     
     public function store_product(Request $request){
+        abort_unless($this->checkPermission('Create Product'), 403);
         $validated = $request->validate([
             'category_id' => 'required|integer',
             'subcategory_id' => 'required|integer',
@@ -68,6 +67,7 @@ class ProductController extends Controller
     }
     
     public function edit_product($id){
+        abort_unless($this->checkPermission('Edit Product'), 403);
         $data['action'] = "Edit";
         $data['pageData'] = Product::find($id);
         $data['pageTitle'] = "Edit Product";
@@ -76,6 +76,7 @@ class ProductController extends Controller
     }
     
     public function update_product($id, Request $request){
+        abort_unless($this->checkPermission('Edit Product'), 403);
         $validated = $request->validate([
             'category_id' => 'required|integer',
             'subcategory_id' => 'required|integer',
@@ -111,6 +112,7 @@ class ProductController extends Controller
     }
     
     public function destroy_product( Request $request){
+        abort_unless($this->checkPermission('Delete Product'), 403);
         $product = Product::find($request->dataId);
         $product->delete();
         echo 1;

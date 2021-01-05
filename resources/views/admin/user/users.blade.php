@@ -14,7 +14,11 @@
       <div class="container-fluid">
         <div class="row mb-2">
           <div class="col-sm-12">
-            <h1>{{$data['pageTitle']}} <a href="{{$routeCreateUrl}}" class="float-right btn btn-sm btn-info"><i class="fa fa-plus fa-sm"></i> Add {{$data['pageTitle']}}</a></h1>
+            <h1>{{$data['pageTitle']}} 
+              @can('Create User')
+              <a href="{{$routeCreateUrl}}" class="float-right btn btn-sm btn-info"><i class="fa fa-plus fa-sm"></i> Add {{$data['pageTitle']}}</a>
+              @endcan
+            </h1>
             <hr>
           </div>
         </div>
@@ -78,8 +82,12 @@
                                 <td><?=$pageData->email?></td>
                                 <td><?=$pageData->status?></td>
                                 <td>
+                                  @can('Edit User')
                                   <a href="{{$routeEditUrl.'/'.$pageData->id}}" class="btn btn-sm btn-success"><i class="fa fa-edit"></i> Edit</a>
+                                  @endcan
+                                  @can('Delete User')
                                   <span onclick="removeData('user',{{$pageData->id}})" class="btn btn-sm btn-danger"><i class="fa fa-trash"></i> Delete</span>
+                                  @endcan
                                 </td>
                             </tr>
                         @endforeach

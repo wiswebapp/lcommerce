@@ -2,18 +2,13 @@
 
 namespace App\Http\Controllers\admin;
 
+use App\User;
+use App\Product;
 use App\Category;
 use App\Http\Controllers\Controller;
-use App\Product;
-use App\User;
 
 class DashboardController extends Controller
 {
-    public function __construct()
-    {
-        $this->middleware('auth:admin');
-    }
-
     public function index()
     {
         $data['userCount'] = User::all()->whereNull('deleted_at')->count();

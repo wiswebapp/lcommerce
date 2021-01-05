@@ -1,8 +1,8 @@
 <?php
 
-use App\Product;
-use Illuminate\Support\Str;
+
 use Illuminate\Support\Facades\Route;
+use Spatie\Permission\Models\Permission;
 
 defined('ADMIN_PATH') or define('ADMIN_PATH', 'webadmin');
 /*
@@ -15,26 +15,6 @@ defined('ADMIN_PATH') or define('ADMIN_PATH', 'webadmin');
 | contains the "web" middleware group. Now create something great!
 |
 */
-
-Auth::routes();
-Route::get('/', 'HomeController@index')->name('home');
-/* for pages */
-Route::get('/{page}', 'PageController')
-->name('page')
-->where('page', 'about|privacy|terms');
-// Route::get('about', 'PageController@about')->name('about');
-// Route::get('terms', 'PageController@terms')->name('terms');
-// Route::get('privacy', 'PageController@privacy')->name('privacy');
-
-/*--------------------Admin Panel--------------------*/
-Route::get(ADMIN_PATH, 'Auth\admin\LoginController@showLoginForm');
-
-Route::prefix(ADMIN_PATH)->group(function () {
-    Route::get('login', 'Auth\admin\LoginController@showLoginForm')->name('admin.login');
-    Route::post('login', 'Auth\admin\LoginController@login');
-    Route::post('logout','Auth\admin\LoginController@logout')->name('admin.logout');
-});
-
 $routeResource = function ($url, $controllerName, $suffix) {
     Route::get($url, $controllerName . '@' . $suffix)->name('admin.' . $suffix);
     Route::get($url . '/create', $controllerName . '@create_' . $suffix)->name('admin.create_' . $suffix);
@@ -44,11 +24,51 @@ $routeResource = function ($url, $controllerName, $suffix) {
     Route::post($url . '/delete', $controllerName . '@destroy_' . $suffix)->name('admin.destroy_' . $suffix);;
 };
 
+
+
+Auth::routes();
+Route::get('/', 'HomeController@index')->name('home');
+/* for pages */
+Route::get('/{page}', 'PageController')->name('page')->where('page', 'about|privacy|terms');
+
+Route::get('create-permission',function(){
+
+    $term = ['Role','Admin','User','Category','SubCategory','Product','Pages'];
+    
+    foreach ($term as $itemValue) {
+
+        $name = 'Create '. $itemValue;
+        $create = Permission::create(['name' => $name,'guard_name' => 'admin']);
+
+        $name = 'View ' . $itemValue;
+        Permission::create(['name' => $name,'guard_name' => 'admin']);
+
+        $name = 'Edit ' . $itemValue;
+        Permission::create(['name' => $name,'guard_name' => 'admin']);
+
+        $name = 'Delete ' . $itemValue;
+        Permission::create(['name' => $name,'guard_name' => 'admin']);
+    }
+
+});
+
+/*--------------------Admin Panel--------------------*/
+Route::get(ADMIN_PATH, 'Auth\admin\LoginController@showLoginForm');
+
+Route::prefix(ADMIN_PATH)->group(function () {
+    Route::get('login', 'Auth\admin\LoginController@showLoginForm')->name('admin.login');
+    Route::post('login', 'Auth\admin\LoginController@login');
+    Route::post('logout', 'Auth\admin\LoginController@logout')->name('admin.logout');
+});
+
 Route::prefix(ADMIN_PATH)->middleware(['auth:admin'])->namespace('admin')->group(function() use($routeResource){
+    
     Route::get('dashboard','DashboardController@index')->name('admin.dashboard');
-    //Common (Ajax)
-    Route::post('product/getCat', 'CategoryController@get_ajax_category')->name('ajax.getCat');
-    Route::post('product/getSubCat', 'CategoryController@get_ajax_subcategory')->name('ajax.getSubCat');
+
+    //Admin Roles
+    $routeResource("roles", "RoleController", 'roles');
+    //Admin Users
+    $routeResource("admin", "AdminController", 'admin');
     //Category
     $routeResource("category", "CategoryController",'category');
     //SubCategory
@@ -59,6 +79,11 @@ Route::prefix(ADMIN_PATH)->middleware(['auth:admin'])->namespace('admin')->group
     $routeResource("user", "UserController",'user');
     //CMS Pages
     $routeResource("pages", "PagesController", 'pages');
+
+    //Common (Ajax)
+    Route::post('product/getCat', 'CategoryController@get_ajax_category')->name('ajax.getCat');
+    Route::post('product/getSubCat', 'CategoryController@get_ajax_subcategory')->name('ajax.getSubCat');
+    
 });
 
 ?>
