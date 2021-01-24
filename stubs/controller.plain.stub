@@ -1,0 +1,51 @@
+<?php
+
+namespace {{ namespace }};
+
+use {{ rootNamespace }}Http\Controllers\Controller;
+use Illuminate\Http\Request;
+
+class {{ class }} extends Controller
+{
+    public function index(){
+        abort_unless($this->checkPermission('View PERMISSION_NAME'), 403);
+        /*
+        *Code
+        */
+    }
+
+    public function create_(){
+        abort_unless($this->checkPermission('Create PERMISSION_NAME'), 403);
+        /*
+        *Code
+        */
+    }
+
+    public function store_(Request $request){
+        abort_unless($this->checkPermission('Create PERMISSION_NAME'), 403);
+        /*
+        *Code
+        */
+    }
+
+    public function edit_($id){
+        abort_unless($this->checkPermission('Edit PERMISSION_NAME'), 403);
+        /*
+        *Code
+        */
+    }
+
+    public function update_(Request $request){
+        abort_unless($this->checkPermission('Edit PERMISSION_NAME'), 403);
+        /*
+        *Code
+        */
+    }
+
+    public function destroy_(Request $request){
+        abort_unless($this->checkPermission('Delete PERMISSION_NAME'), 403);
+        /*
+        *Code
+        */
+    }
+}

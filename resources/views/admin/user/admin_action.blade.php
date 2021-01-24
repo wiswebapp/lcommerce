@@ -58,7 +58,7 @@
                   <div class="col-md-8">
                       <div class="form-group">
                           <label>Email Address (Username)</label>
-                          <input type="text" name="email" value="{{old('name',$pageData->email)}}" class="form-control {{ $errors->has('email') ? 'is-invalid' : '' }}" placeholder="Enter Email">
+                          <input type="email" name="email" value="{{old('email',$pageData->email)}}" class="form-control {{ $errors->has('email') ? 'is-invalid' : '' }}" placeholder="Enter Email">
                       </div>
                   </div>
 

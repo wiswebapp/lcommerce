@@ -89,7 +89,7 @@ $routeEditUrl = url(ADMIN_PATH.'/admin/edit/');
                                                 class="btn btn-sm btn-success"><i class="fa fa-edit"></i> Edit</a>
                                             @endcan
                                             @if(Auth::User()->can('Delete Admin') && $pageData->getRoleNames()->toArray()[0] != "Super Admin")
-                                            <span onclick="removeData('product',{{$pageData->id}})"
+                                            <span onclick="removeData('admin',{{$pageData->id}})"
                                                 class="btn btn-sm btn-danger"><i class="fa fa-trash"></i> Delete</span>
                                             @endif
                                         </td>

@@ -30,7 +30,7 @@ class ProductController extends Controller
     public function create_product(){
         abort_unless($this->checkPermission('Create Product'), 403);
         $data['action'] = "Add";        
-        $data['pageTitle'] = "Add Catgory";
+        $data['pageTitle'] = "Add Product";
         $data['pageData']['category'] = Builder::getCategoryData();
         return view('admin.product.product_action')->with('data',$data);
     }

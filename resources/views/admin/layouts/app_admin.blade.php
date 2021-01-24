@@ -13,15 +13,16 @@
     <link rel="stylesheet" href="{{adminAssets('plugins/icheck-bootstrap/icheck-bootstrap.min.css')}}">
     <link rel="stylesheet" href="{{adminAssets('plugins/overlayScrollbars/css/OverlayScrollbars.min.css')}}">
     <link rel="stylesheet" href="{{adminAssets('plugins/summernote/summernote-bs4.css')}}">
-    <link rel="stylesheet" href="{{adminAssets('dist/css/adminlte.min.css')}}">
     <link rel="stylesheet" href="{{adminAssets('plugins/select2/css/select2.min.css')}}">
+    <link rel="stylesheet" href="{{adminAssets('dist/css/adminlte.min.css')}}">
+    <link rel="stylesheet" href="{{adminAssets('dist/css/custom-admin.css')}}">
     <!-- jQuery -->
     <script src="{{adminAssets('plugins/jquery/jquery.min.js')}}"></script>
     <link href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700" rel="stylesheet">
 </head>
 <body class="hold-transition sidebar-mini layout-fixed layout-navbar-fixed layout-footer-fixed">
 @include('admin.includes.backend_js')
-<div class="wrapper">
+<div class="wrapper" id="wrapper-app">
 
     @include('admin.includes.navbar')
 
@@ -30,11 +31,12 @@
     @yield('content')
     
     {{-- @include('admin.includes.footer') --}}
-  
+</div>
 <!-- Bootstrap -->
 <script src="{{adminAssets('plugins/bootstrap/js/bootstrap.min.js')}}"></script>
 <script src="{{adminAssets('plugins/bootstrap/js/bootstrap.bundle.min.js')}}"></script>
 <script src="{{adminAssets('dist/js/adminlte.min.js')}}"></script>
+<script src="{{asset('js/app.js')}}"></script>
 <!-- overlayScrollbars -->
 <script src="{{adminAssets('plugins/overlayScrollbars/js/jquery.overlayScrollbars.min.js')}}"></script>
 <script src="{{adminAssets('plugins/topbar/topbar.min.js')}}"></script>

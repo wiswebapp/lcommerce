@@ -9,6 +9,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 use Spatie\Permission\Models\Role;
 use Illuminate\Support\Facades\Hash;
+use View;
 
 class AdminController extends Controller
 {
@@ -94,6 +95,7 @@ class AdminController extends Controller
             ],
             'status' => 'required',
         ]);
+        
         $AdminUser = Admin::find($id);
         //Uploading Image
         if ($request->hasFile('page_image')) {
@@ -119,8 +121,16 @@ class AdminController extends Controller
         }
         $ROLE_OF_ADMIN = $input['role'];
         unset($input['role']);
-        $AdminUser->fill($input)->save();
+        $AdminUser->update($input);
         $AdminUser->syncRoles($ROLE_OF_ADMIN);
         return redirect()->route('admin.admin')->with('success', 'Data Updated Successfuly');
+    }
+
+    public function destroy_admin(Request $request)
+    {
+        abort_unless($this->checkPermission('Delete Admin'), 403);
+        $dataTobeDelete = Admin::find($request->dataId);
+        $dataTobeDelete->delete();
+        echo 1;
     }
 }

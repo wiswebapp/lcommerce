@@ -3828,11 +3828,12 @@ input[type="button"].btn-block {
   margin-left: 1.25rem; }
 
 .card-header {
-  padding: 0.75rem 1.25rem;
+  padding: 0.50rem 1.25rem;
   margin-bottom: 0;
-  color: inherit;
-  background-color: rgba(0, 0, 0, 0.03);
-  border-bottom: 1px solid rgba(0, 0, 0, 0.125); }
+  font-size: 19px;
+  color: white;
+  background-color: rgb(252, 88, 89);
+  border-bottom: 1px solid rgb(21, 21, 21) }
   .card-header:first-child {
     border-radius: calc(0.25rem - 1px) calc(0.25rem - 1px) 0 0; }
   .card-header + .list-group .list-group-item:first-child {
@@ -8994,7 +8995,7 @@ h1, h2, h3, h4, h5,
 
 .billing-form label {
   color: #000000;
-  font-size: 14px; }
+  font-size: 16px; }
 
 .billing-form .icon {
   position: absolute;
@@ -9017,16 +9018,18 @@ h1, h2, h3, h4, h5,
 .billing-form .form-control {
   font-weight: 300;
   border: transparent !important;
-  border: 1px solid rgba(0, 0, 0, 0.1) !important;
-  height: 58px !important;
+  border: 1px solid rgba(18, 17, 17, 0.5) !important;
+  height: 47px !important;
   padding-left: 15px;
   padding-right: 15px;
-  background: transparent !important;
-  color: rgba(0, 0, 0, 0.4) !important;
-  font-size: 14px;
+  background: #0000 !important;
+  color: rgb(0, 0, 0) !important;
+  font-size: 15px;
   border-radius: 0px;
   -webkit-box-shadow: none !important;
-  box-shadow: none !important; }
+  box-shadow: none !important; 
+  border-radius: 3px;
+}
   .billing-form .form-control::-webkit-input-placeholder {
     /* Chrome/Opera/Safari */
     color: rgba(0, 0, 0, 0.4); }

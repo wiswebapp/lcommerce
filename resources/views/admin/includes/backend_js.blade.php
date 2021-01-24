@@ -1,12 +1,18 @@
 <script>
 
 function removeData(dataType,dataId){
-    if(dataType == "product"){
-        routeUrl = '{{route('admin.destroy_product')}}';
-    }else if(dataType == "category"){
-        routeUrl = '{{route('admin.destroy_category')}}';
-    }else if(dataType == "subcategory"){
-        routeUrl = '{{route('admin.destroy_subcategory')}}';
+    if (confirm("Are you sure to remove " + dataType + " ?") == true) {
+        if(dataType == "product"){
+            routeUrl = '{{route('admin.destroy_product')}}';
+        }else if(dataType == "category"){
+            routeUrl = '{{route('admin.destroy_category')}}';
+        }else if(dataType == "subcategory"){
+            routeUrl = '{{route('admin.destroy_subcategory')}}';
+        }else if(dataType == "user"){
+            routeUrl = '{{route('admin.destroy_user')}}';
+        }else if(dataType == "admin"){
+            routeUrl = '{{route('admin.destroy_admin')}}';
+        }
     }
     removeDataFromDB(routeUrl ,dataId);
 }
@@ -23,6 +29,7 @@ function removeDataFromDB(routeUrl,dataId){
         },
         success : function(response) {
             if(response){
+                alert("Data has been removed");
                 location.reload(); 
             }
         }

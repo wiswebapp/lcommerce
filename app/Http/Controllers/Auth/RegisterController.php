@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers\Auth;
 
-use Mail;
+use App\Events\UserRegisterEvent;
 use App\User;
 use Illuminate\Support\Facades\Hash;
 use App\Http\Controllers\Controller;
@@ -67,19 +67,17 @@ class RegisterController extends Controller
      */
     protected function create(array $data)
     {
-        $useremail = $data['email'];
-        $userCreate = User::create([
+        $userData = [
             'fname' => $data['fname'],
             'lname' => $data['lname'],
-            'email' => $useremail,
+            'email' => $data['email'],
             'password' => Hash::make($data['password']),
             'status' => 'Active'
-        ]);
-
-        $subject = "Welcome to ". env('APP_NAME') ." !";
-        Mail::send('email.register_user', $data, function ($message) use ($useremail, $subject) {
-            $message->to($useremail)->subject($subject);
-        });
+        ];
+        
+        $userCreate = User::create($userData);
+        
+        event(new UserRegisterEvent($userData) );
 
         return $userCreate;
     }

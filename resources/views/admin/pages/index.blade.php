@@ -80,11 +80,7 @@ $routeEditUrl = url(ADMIN_PATH.'/pages/edit/');
                                         <td>
                                             @can('View Pages')
                                             <a href="{{$routeEditUrl.'/'.$pageData->id}}"
-                                                class="btn btn-sm btn-success"><i class="fa fa-edit"></i> Edit</a>
-                                            @endcan
-                                            @can('Delete Pages')
-                                            <span onclick="removeData('product',{{$pageData->id}})"
-                                                class="btn btn-sm btn-danger"><i class="fa fa-trash"></i> Delete</span>
+                                                class="btn btn-sm btn-link btn-block"><i class="fa fa-edit"></i> Edit</a>
                                             @endcan
                                         </td>
                                     </tr>

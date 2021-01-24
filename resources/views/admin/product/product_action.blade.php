@@ -11,6 +11,7 @@
 @section('title',$data['pageTitle'])
 
 @section('content')
+
 <div class="content-wrapper">
     <!-- Content Header (Page header) -->
     <section class="content-header">
@@ -76,7 +77,9 @@
                 <div class="col-md-8">
                   <div class="form-group">
                       <label>Product Image</label><br>
+                      @if ($pageData->product_image != "")
                       <img src="{{Storage::url('public/product/'.$pageData->product_image)}}" alt="Product Image" class="img-thumbnail" style="height: 150px;width: 150px;">
+                      @endif
                       <input type="file" name="product_image" class="form-control {{ $errors->has('product_image') ? 'is-invalid' : '' }}" >
                   </div>
                 </div>

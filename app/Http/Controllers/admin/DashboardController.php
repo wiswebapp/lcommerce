@@ -17,4 +17,10 @@ class DashboardController extends Controller
         $data['subCategoryCount'] = Category::all()->where('parent_id','!=',0)->whereNull('deleted_at')->count();
         return view('admin.dashboard')->with('data',$data);
     }
+
+    public function getUserData()
+    {
+        $data['userData'] = User::all()->whereNull('deleted_at');
+        return $data;
+    }
 }

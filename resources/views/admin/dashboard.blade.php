@@ -74,6 +74,8 @@
               </div>
             </div>
 
+            <userDataLog></userDataLog>
+            
             {{-- <div class="card">
               <div class="card-header border-transparent">
                 <h3 class="card-title">Users Data</h3>

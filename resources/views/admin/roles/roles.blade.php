@@ -29,40 +29,9 @@ $routeEditUrl = url(ADMIN_PATH.'/roles/edit/');
                 <div class="col-12">
                     <div class="card">
                         @include('includes.alert_msg')
-                        <div class="card-header">
-                            <!-- Filter Area -->
-                            <form method="GET" action="">
-                                <div class="row">
-                                    <div class="col-1">
-                                        <p style="margin-top: 7px;">Filter Data</p>
-                                    </div>
-                                    <div class="col-2">
-                                        <input type="text" name="name" class="form-control" placeholder="Filter by Name"
-                                            value="{{isset($_GET['name']) ? $_GET['name'] : ""}}">
-                                    </div>
-                                    <div class="col-2">
-                                        <select name="status" class="form-control">
-                                            <option value="">Filter By Status</option>
-                                            <option <?=(@$_GET['status'] == "Active") ? "selected" : ""?>
-                                                value="Active">Active</option>
-                                            <option <?=(@$_GET['status'] == "InActive") ? "selected" : ""?>
-                                                value="InActive">InActive</option>
-                                        </select>
-                                    </div>
-                                    <div class="col-2">
-                                        <button type="submit" class="btn btn-default">Filter</button>
-                                        <a href="{{$routeUrl}}" class="btn btn-default">Reset</a>
-                                    </div>
-                                    <div class="col-5">
-                                        {{-- <a href="{{$routeCreateUrl}}" class="btn btn-default" style="float:
-                                        right">Create Page</a> --}}
-                                    </div>
-                                </div>
-                            </form>
-                        </div>
                         <!-- /.card-header -->
                         <div class="card-body table-bodered table-responsive p-0">
-                            <table class="table table-bordered text-nowrap">
+                            <table class="table table-bordered table-hover">
                                 <thead>
                                     <tr>
                                         <th><input type="checkbox"></th>
@@ -79,7 +48,7 @@ $routeEditUrl = url(ADMIN_PATH.'/roles/edit/');
                                         <td><?=$pageData->name?></td>
                                         <td>
                                             @foreach ($pageData->permissions as $item)
-                                                <span class="badge badge-info">{{$item->name}}</span>
+                                                <span class="badge badge-warning">{{$item->name}}</span>
                                             @endforeach
                                         </td>
                                         <td>

@@ -65,5 +65,8 @@ class UserController extends Controller
     }
     public function destroy_user(Request $request){
         abort_unless($this->checkPermission('Delete User'), 403);
+        $dataTobeDelete = User::find($request->dataId);
+        $dataTobeDelete->delete();
+        echo 1;
     }
 }
