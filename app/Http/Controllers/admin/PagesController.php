@@ -1,28 +1,24 @@
 <?php
-
 namespace App\Http\Controllers\admin;
 
-use App\Http\Controllers\Controller;
 use App\Pages;
 use Illuminate\Http\Request;
+use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Storage;
 
 class PagesController extends Controller
 {
-    public function pages()
+    public function pages(Request $request)
     {
         abort_unless($this->checkPermission('View Pages'), 403);
-        $name = isset($_REQUEST['name']) ? trim($_REQUEST['name']) : "";
-        $status = isset($_REQUEST['status']) ? trim($_REQUEST['status']) : "";
         $query = Pages::orderBy('id', 'desc');
-        if (!empty($name)) {
-            $query->where('page_title', 'LIKE', '%' . $name . '%');
+        if (!empty($request->input('name'))) {
+            $query->where('page_title', 'LIKE', '%' . $request->input('name') . '%');
         }
-        if (!empty($status)) {
-            $query->where('status', $status);
+        if (!empty($request->input('status'))) {
+            $query->where('status', $request->input('status'));
         }
-        $pagesdata = $query->paginate(10);
-        $data['pageData'] = $pagesdata;
+        $data['pageData'] = $query->paginate(10);
         $data['pageTitle'] = "Pages";
         return view('admin.pages.index')->with('data', $data);
     }
@@ -38,7 +34,7 @@ class PagesController extends Controller
     public function store_pages (Request $request)
     {
         abort_unless($this->checkPermission('Create Pages'), 403);
-       $validated = $request->validate([
+        $request->validate([
             'page_title' => 'required',
             'page_description' => 'required',
             'page_meta_keyword' => 'required',
@@ -46,6 +42,7 @@ class PagesController extends Controller
             'status' => 'required',
         ]);
         //Uploading Image
+        $newFileName = "";
         if ($request->hasFile('page_image')) {
             $extension = $request->file('page_image')->extension();
             $newFileName = "PAGES_".time().".".$extension;
@@ -54,8 +51,6 @@ class PagesController extends Controller
                 Storage::makeDirectory($uploadPath);
             }
             $request->file('page_image')->storeAs($uploadPath,$newFileName);
-        }else{
-            $newFileName = "";
         }
 
         $Pages = new Pages();
@@ -77,7 +72,7 @@ class PagesController extends Controller
     public function update_pages($id, Request $request)
     {
         abort_unless($this->checkPermission('Edit Pages'), 403);
-        $validated = $request->validate([
+        $request->validate([
             'page_title' => 'required',
             'page_description' => 'required',
             'page_meta_keyword' => 'required',
@@ -86,6 +81,7 @@ class PagesController extends Controller
         ]);
         $pages = Pages::find($id);
         //Uploading Image
+        $newFileName = $pages->page_image;
         if ($request->hasFile('page_image')) {
             $extension = $request->file('page_image')->extension();
             $newFileName = "PAGES_" . time() . "." . $extension;
@@ -97,8 +93,6 @@ class PagesController extends Controller
                 Storage::delete($uploadPath . $pages->page_image);
             }
             $request->file('page_image')->storeAs($uploadPath, $newFileName);
-        } else {
-            $newFileName = $pages->page_image;
         }
 
         $input = $request->all();
@@ -106,5 +100,4 @@ class PagesController extends Controller
         $pages->fill($input)->save();
         return redirect()->route('admin.pages')->with('success', 'Data Updated Successfuly');
     }
-    
 }

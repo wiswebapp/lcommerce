@@ -146,7 +146,7 @@
           @foreach ($data['productList'] as $key => $item)
           <div class="col-md-6 col-lg-3 ftco-animate">
               <div class="product">
-                  <a href="#" class="img-prod"><img class="img-fluid" src="storage/product/{{$item->product_image}}" alt="Colorlib Template">
+                  <a href="{{$item->product_slug}}" class="img-prod"><img class="img-fluid" src="storage/product/{{$item->product_image}}" alt="Colorlib Template">
                       <span class="status">Bestseller</span>
                       <div class="overlay"></div>
                   </a>

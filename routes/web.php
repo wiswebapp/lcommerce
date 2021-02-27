@@ -19,21 +19,16 @@ $routeResource = function ($url, $controllerName, $suffix) {
     Route::get($url . '/create', $controllerName . '@create_' . $suffix)->name('admin.create_' . $suffix);
     Route::post($url . '/create', $controllerName . '@store_' . $suffix);
     Route::get($url . '/edit/{id}', $controllerName . '@edit_' . $suffix)->name('admin.edit_' . $suffix);
-    Route::post($url . '/edit/{id}', $controllerName . '@update_' . $suffix);
-    Route::post($url . '/delete', $controllerName . '@destroy_' . $suffix)->name('admin.destroy_' . $suffix);;
+    Route::put($url . '/edit/{id}', $controllerName . '@update_' . $suffix);
+    Route::delete($url . '/delete', $controllerName . '@destroy_' . $suffix)->name('admin.destroy_' . $suffix);;
 };
-
 
 
 Auth::routes();
 Route::get('/', 'HomeController@index')->name('home');
 /* for pages */
 Route::get('/{page}', 'PageController')->name('page')->where('page', 'about|privacy|terms');
-/* for testing */
-Route::get('/testing',function(){
-    
-});
-
+Route::get('/{slug}', 'ItemController@viewItem');
 
 Route::get('create-permission',function(){
     $term = ['Role','Admin','User','Category','SubCategory','Product','Pages'];

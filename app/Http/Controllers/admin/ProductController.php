@@ -1,28 +1,24 @@
 <?php
-
 namespace App\Http\Controllers\admin;
 
-use App\Http\Controllers\Controller;
 use App\Product;
-use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\Request;
+use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Database\Eloquent\Builder;
 
 class ProductController extends Controller
 {    
-    public function product(){
+    public function product(Request $request){
         abort_unless($this->checkPermission('View Product'), 403);
-        $name = isset($_REQUEST['name']) ? trim($_REQUEST['name']) : "";
-        $status = isset($_REQUEST['status']) ? trim($_REQUEST['status']) : "";
         $query = Product::whereNull('deleted_at')->orderBy('id', 'desc');
-        if(!empty($name)){
-            $query->where('product_name','LIKE','%'.$name.'%');
+        if(!empty($request->input('name'))){
+            $query->where('product_name','LIKE','%'. $request->input('name').'%');
         }
-        if(!empty($status)){
-            $query->where('status',$status);
+        if(!empty($request->input('status'))){
+            $query->where('status', $request->input('status'));
         }
-        $product = $query->paginate(10);
-        $data['pageData'] = $product;
+        $data['pageData'] = $query->paginate(10);
         $data['pageTitle'] = "Product";
         return view('admin.product.index')->with('data',$data);
     }
@@ -37,7 +33,7 @@ class ProductController extends Controller
     
     public function store_product(Request $request){
         abort_unless($this->checkPermission('Create Product'), 403);
-        $validated = $request->validate([
+        $request->validate([
             'category_id' => 'required|integer',
             'subcategory_id' => 'required|integer',
             'product_name' => 'required|max:255',
@@ -47,6 +43,7 @@ class ProductController extends Controller
             'product_image' => 'required|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
         ]);
         //Uploading Image
+        $newFileName = "";
         if ($request->hasFile('product_image')) {
             $extension = $request->file('product_image')->extension();
             $newFileName = "PRODUCT_".time().".".$extension;
@@ -55,8 +52,6 @@ class ProductController extends Controller
                 Storage::makeDirectory($uploadPath);
             }
             $request->file('product_image')->storeAs($uploadPath,$newFileName);
-        }else{
-            $newFileName = "";
         }
 
         $Product = new Product();
@@ -77,7 +72,7 @@ class ProductController extends Controller
     
     public function update_product($id, Request $request){
         abort_unless($this->checkPermission('Edit Product'), 403);
-        $validated = $request->validate([
+        $request->validate([
             'category_id' => 'required|integer',
             'subcategory_id' => 'required|integer',
             'product_name' => 'required|max:255',
@@ -88,10 +83,8 @@ class ProductController extends Controller
         ]);
         $Product = Product::find($id);
         //Uploading Image
+        $newFileName = $Product->product_image;
         if ($request->hasFile('product_image')) {
-            //--------------Method1--------------
-            //$path = $request->file('product_image')->store('/public/productimg');
-            //--------------Method2--------------
             $extension = $request->file('product_image')->extension();
             $newFileName = "PRODUCT_".time().".".$extension;
             $uploadPath = '/public/product/';
@@ -102,8 +95,6 @@ class ProductController extends Controller
                 Storage::delete($uploadPath.$Product->product_image);
             }
             $request->file('product_image')->storeAs($uploadPath,$newFileName);
-        }else{
-            $newFileName = $Product->product_image;
         }
         $input = $request->all();
         $input['product_image'] = $newFileName;        
@@ -117,5 +108,4 @@ class ProductController extends Controller
         $product->delete();
         echo 1;
     }
-
 }

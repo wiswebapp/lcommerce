@@ -20,7 +20,7 @@ window.Vue = require('vue');
 // files.keys().map(key => Vue.component(key.split('/').pop().split('.')[0], files(key).default))
 
 Vue.component(
-    'userdatalog', 
+    'dashboard-data', 
     require('./components/UserDataLog.vue').default
 );
 
@@ -31,5 +31,5 @@ Vue.component(
  */
 
 const app = new Vue({
-    el: '#wrapper-app',
+    el: '#app',
 });

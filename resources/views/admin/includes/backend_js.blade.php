@@ -18,7 +18,7 @@ function removeData(dataType,dataId){
 }
 function removeDataFromDB(routeUrl,dataId){
     $.ajax({
-        type : "POST",
+        type : "DELETE",
         url : routeUrl,
         data : {
             dataId:dataId

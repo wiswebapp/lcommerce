@@ -22,7 +22,7 @@
 </head>
 <body class="hold-transition sidebar-mini layout-fixed layout-navbar-fixed layout-footer-fixed">
 @include('admin.includes.backend_js')
-<div class="wrapper" id="wrapper-app">
+<div class="wrapper" id="app">
 
     @include('admin.includes.navbar')
 

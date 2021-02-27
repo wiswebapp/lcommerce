@@ -5,25 +5,22 @@ namespace App\Http\Controllers\admin;
 use App\User;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
-use App\Http\Requests\UserStoreRequest;
 use Illuminate\Support\Facades\Hash;
+use App\Http\Requests\UserStoreRequest;
 
 class UserController extends Controller
 {    
-    public function user(){
+    public function user(Request $request){
         abort_unless($this->checkPermission('View User'), 403);
-        $name = isset($_REQUEST['name']) ? trim($_REQUEST['name']) : "";
-        $status = isset($_REQUEST['status']) ? trim($_REQUEST['status']) : "";
         $query = User::whereNull('deleted_at')->orderBy('id', 'desc');
-        if(!empty($name)){
-            $query->where('fname','LIKE','%'.$name.'%');
-            $query->orWhere('lname','LIKE','%'.$name.'%');
+        if(!empty($request->input('name'))){
+            $query->where('fname','LIKE','%'. $request->input('name').'%');
+            $query->orWhere('lname','LIKE','%'. $request->input('name').'%');
         }
-        if(!empty($status)){
-            $query->where('status',$status);
+        if(!empty($request->input('status'))){
+            $query->where('status', $request->input('status'));
         }
-        $product = $query->paginate(10);
-        $data['pageData'] = $product;
+        $data['pageData'] = $query->paginate(10);
         $data['pageTitle'] = "Register Users";
         return view('admin.user.users')->with('data',$data);
     }

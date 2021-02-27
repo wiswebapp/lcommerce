@@ -2,6 +2,7 @@
 
 namespace App;
 
+use Illuminate\Support\Str;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
@@ -10,12 +11,20 @@ class Product extends Model
     use SoftDeletes;
 
     protected $table = 'products';
+
+    public static function boot()
+    {
+        parent::boot();
+
+        self::creating(function ($model) {
+            $model->product_slug = Str::of($model->product_name)->slug('-');
+        });
+
+        self::updating(function ($model) {
+            $model->product_slug = Str::of($model->product_name)->slug('-');
+        });
+    }
     
-    /**
-     * The attributes that are mass assignable.
-     *
-     * @var array
-     */
     protected $fillable = [
         'category_id', 'subcategory_id', 'product_name','product_description','price','product_image','availblity','status'
     ];

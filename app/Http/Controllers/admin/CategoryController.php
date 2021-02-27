@@ -9,23 +9,18 @@ use Illuminate\Http\Request;
 
 class CategoryController extends Controller
 {
-    public function category(){
+    public function category(Request $request){
         abort_unless($this->checkPermission('View Category'), 403);
-        $name = isset($_REQUEST['name']) ? trim($_REQUEST['name']) : "";
-        $status = isset($_REQUEST['status']) ? trim($_REQUEST['status']) : "";
-
         $query = Category::where([['parent_id','=',0]])->orderBy('id', 'desc');
-        
-        if(!empty($name)){
-            $query->where('category_name','LIKE','%'.$name.'%');
+        if(!empty($request->input('name'))){
+            $query->where('category_name','LIKE','%'. $request->input('name') .'%');
         }
-        if(!empty($status)){
-            $query->where('status',$status);
+        if(!empty($request->input('status'))){
+            $query->where('status', $request->input('status'));
         }
         $category = $query->paginate(10);
         $data['pageData'] = $category;
         $data['pageTitle'] = "Category";
-        
         return view('admin.category.index')->with('data',$data);
     }
 
@@ -38,7 +33,7 @@ class CategoryController extends Controller
     
     public function store_category(Request $request){
         abort_unless($this->checkPermission('Create Category'), 403);
-        $validated = $request->validate([
+        $request->validate([
             'category_name' => 'required|max:255',
             'status' => 'required',
         ]);
@@ -51,16 +46,15 @@ class CategoryController extends Controller
 
     public function edit_category($id){
         abort_unless($this->checkPermission('Edit Category'), 403);
-        $dataCategory = Category::find($id);
         $data['pageTitle'] = "Edit Category";
         $data['action'] = "Edit";
-        $data['pageData'] = $dataCategory;
+        $data['pageData'] = Category::find($id);
         return view('admin.category.category_action')->with('data',$data);
     }
 
     public function update_category($id,Request $request){
         abort_unless($this->checkPermission('Edit Category'), 403);
-        $validated = $request->validate([
+        $request->validate([
             'category_name' => 'required|max:255',
             'status' => 'required',
         ]);
@@ -80,35 +74,29 @@ class CategoryController extends Controller
         echo 1;
     }
     
-    public function subcategory(){
+    public function subcategory(Request $request){
         abort_unless($this->checkPermission('View SubCategory'), 403);
-        $name = isset($_REQUEST['name']) ? trim($_REQUEST['name']) : "";
-        $status = isset($_REQUEST['status']) ? trim($_REQUEST['status']) : "";
-
         $query = Category::where([['parent_id','!=',0]])->orderBy('id', 'desc');
-        
-        if(!empty($name)){
-            $query->where('category_name','LIKE','%'.$name.'%');
+        if(!empty($request->input('name'))){
+            $query->where('category_name','LIKE','%'. $request->input('name').'%');
         }
-        if(!empty($status)){
-            $query->where('status',$status);
+        if(!empty($request->input('status'))){
+            $query->where('status', $request->input('status'));
         }
-        $subcategory = $query->paginate(10);
-        $data['pageData'] = $subcategory;
-        $data['pageTitle'] = "Sub Category";
-        
+        $data['pageData'] = $query->paginate(10);
+        $data['pageTitle'] = "Sub Category";   
         return view('admin.category.subcategory')->with('data',$data);
     }
     public function create_subcategory(){
         abort_unless($this->checkPermission('Create SubCategory'), 403);
         $data['pageTitle'] = "Add SubCategory";
         $data['action'] = "Add";
-        $data['pageData']['category'] = Category::where([['parent_id','=',0]])->orderBy('id', 'desc')->get();
+        $data['pageData']['category'] = Category::where(['status' => 'Active', ['parent_id','=',0]])->orderBy('id', 'desc')->get();
         return view('admin.category.subcategory_action')->with('data',$data);
     }
     public function store_subcategory(Request $request){
         abort_unless($this->checkPermission('Create SubCategory'), 403);
-        $validated = $request->validate([
+        $request->validate([
             'parent_id' => 'required|integer',
             'category_name' => 'required|max:255',
             'status' => 'required',
@@ -129,7 +117,7 @@ class CategoryController extends Controller
     }
     public function update_subcategory($id,Request $request){
         abort_unless($this->checkPermission('Edit SubCategory'), 403);
-        $validated = $request->validate([
+        $request->validate([
             'parent_id' => 'required|integer',
             'category_name' => 'required|max:255',
             'status' => 'required',
@@ -160,14 +148,12 @@ class CategoryController extends Controller
         return response()->json(['success' => true, 'subCatData' => $CatData]);
     }
     public function get_ajax_subcategory(Request $request){
-        abort_unless($this->checkPermission('View SubCategory'), 403);
-        $categoryId = $request->input('categoryId');
-        $selectedId = $request->input('selectedId');        
-        $subCat = Builder::getSubCategoryData('*',['status'=>'Active','parent_id'=>$categoryId]);
+        abort_unless($this->checkPermission('View SubCategory'), 403);       
+        $subCat = Builder::getSubCategoryData('*',['status'=>'Active','parent_id'=> $request->input('categoryId')]);
         $subCatData="";
         if( $subCat->count() > 0){
             foreach($subCat as $catData){
-                $selected = ($selectedId == $catData->id) ? "selected" : "";
+                $selected = ($request->input('selectedId') == $catData->id) ? "selected" : "";
                 $subCatData .= "<option value='".$catData->id."' $selected>".$catData->category_name."</option>";
             }
         }else{

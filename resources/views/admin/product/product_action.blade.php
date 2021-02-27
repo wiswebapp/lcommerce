@@ -32,7 +32,7 @@
            @include('includes.alert_msg')
             <div class="card">
             @if ($action == "Edit")
-                {{Form::open(['action' => ['admin\ProductController@update_product',$pageData->id],'method'=>'post','enctype'=>'multipart/form-data'])}}
+                {{Form::open(['action' => ['admin\ProductController@update_product',$pageData->id],'method'=>'PUT','enctype'=>'multipart/form-data'])}}
             @else
               {{Form::open(['action' => ['admin\ProductController@store_product'],'method'=>'post','enctype'=>'multipart/form-data'])}}
             @endif
