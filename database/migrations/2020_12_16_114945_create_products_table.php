@@ -20,7 +20,7 @@ class CreateProductsTable extends Migration
             $table->string('product_slug');
             $table->string('product_name');
             $table->text('product_description');
-            $table->float('price',5,2);
+            $table->float('price',10,2);
             $table->string('product_image')->nullable()->default(NULL);
             $table->enum('availblity',['Yes','No'])->default('Yes');
             $table->enum('status',['Active','InActive'])->default('Active');

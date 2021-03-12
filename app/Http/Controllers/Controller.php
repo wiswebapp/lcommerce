@@ -15,8 +15,7 @@ class Controller extends BaseController
     public $myPermissions;
 
     public function userPermissions(){
-        $allPermission = $this->myPermissions = Auth::user()->getAllPermissions()->pluck('name')->toArray();
-        return $allPermission;
+        return $this->myPermissions = Auth::user()->getAllPermissions()->pluck('name')->toArray();
     }
 
     public function checkPermission( $permissionName )

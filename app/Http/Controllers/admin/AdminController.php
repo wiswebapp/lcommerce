@@ -8,7 +8,6 @@ use App\Http\Controllers\MyClass\GeneralClass;
 use App\Http\Requests\CreateAdminRequest;
 use Illuminate\Http\Request;
 use Spatie\Permission\Models\Role;
-use Illuminate\Support\Facades\Hash;
 
 class AdminController extends Controller
 {
@@ -20,7 +19,7 @@ class AdminController extends Controller
         $query = $this->filterData('Admin',$request, Admin::orderBy('id', 'desc'));
         $data['pageData'] = $query->paginate(10);
         $data['pageTitle'] = "Admin Users";
-        return view('admin.user.admin')->with('data', $data);
+        return view('admin.user.admin', compact('data'));
     }
 
     public function create_admin()
@@ -29,21 +28,16 @@ class AdminController extends Controller
         $data['action'] = "Add";
         $data['pageTitle'] = "Add Pages";
         $data['roleList'] = Role::all();
-        return view('admin.user.admin_action')->with('data', $data);
+        return view('admin.user.admin_action', compact('data'));
     }
 
     public function store_admin(CreateAdminRequest $request)
     {
         abort_unless($this->checkPermission('Create Admin'), 403);
-        $Admin = new Admin();
         $input = $request->all();
-        
-        $input['password'] = Hash::make($input['password']);
         $ROLE_OF_ADMIN = $input['role'];
         unset($input['role']);
-
-        $user = $Admin::Create($input);
-        $user->assignRole($ROLE_OF_ADMIN);
+        Admin::Create($input)->assignRole($ROLE_OF_ADMIN);
         return redirect()->route('admin.admin')->with('success', 'Data Added Successfuly');
     }
 
@@ -55,7 +49,7 @@ class AdminController extends Controller
         $data['pageTitle'] = "Edit Admin";
         $data['RollName'] = $data['pageData']->getRoleNames()->toArray()[0];
         $data['roleList'] = Role::all();
-        return view('admin.user.admin_action')->with('data', $data);
+        return view('admin.user.admin_action',compact('data'));
     }
 
     public function update_admin($id, CreateAdminRequest $request)
@@ -63,10 +57,8 @@ class AdminController extends Controller
         abort_unless($this->checkPermission('Edit Admin'), 403);
         $AdminUser = Admin::find($id);
         $input = $request->all();
-        if ($input['password'] == null) {
+        if ($input['password'] == null || empty($input['password'])) {
             unset($input['password']);
-        } else {
-            $input['password'] = Hash::make($input['password']);
         }
         $ROLE_OF_ADMIN = $input['role'];
         unset($input['role']);

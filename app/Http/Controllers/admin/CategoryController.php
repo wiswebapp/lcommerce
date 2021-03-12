@@ -18,8 +18,7 @@ class CategoryController extends Controller
         if(!empty($request->input('status'))){
             $query->where('status', $request->input('status'));
         }
-        $category = $query->paginate(10);
-        $data['pageData'] = $category;
+        $data['pageData'] = $query->paginate(10);
         $data['pageTitle'] = "Category";
         return view('admin.category.index')->with('data',$data);
     }
