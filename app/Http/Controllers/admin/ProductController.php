@@ -4,6 +4,7 @@ namespace App\Http\Controllers\admin;
 use App\Product;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use App\Http\Requests\CreateProduct;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Database\Eloquent\Builder;
 
@@ -31,18 +32,9 @@ class ProductController extends Controller
         return view('admin.product.product_action')->with('data',$data);
     }
     
-    public function store_product(Request $request){
+    public function store_product(CreateProduct $request){
         abort_unless($this->checkPermission('Create Product'), 403);
-        $request->validate([
-            'category_id' => 'required|integer',
-            'subcategory_id' => 'required|integer',
-            'product_name' => 'required|max:255',
-            'product_description' => 'required|max:255',
-            'price' => 'required|integer',
-            'status' => 'required',
-            'product_image' => 'required|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
-        ]);
-        //Uploading Image
+        
         $newFileName = "";
         if ($request->hasFile('product_image')) {
             $extension = $request->file('product_image')->extension();
@@ -70,20 +62,11 @@ class ProductController extends Controller
         return view('admin.product.product_action')->with('data',$data);
     }
     
-    public function update_product($id, Request $request){
+    public function update_product($id, CreateProduct $request){
         abort_unless($this->checkPermission('Edit Product'), 403);
-        $request->validate([
-            'category_id' => 'required|integer',
-            'subcategory_id' => 'required|integer',
-            'product_name' => 'required|max:255',
-            'product_description' => 'required|max:255',
-            'price' => 'required|integer',
-            'status' => 'required',
-            'product_image' => 'image|mimes:jpeg,png,jpg,gif,svg|max:2048',
-        ]);
         $Product = Product::find($id);
-        //Uploading Image
         $newFileName = $Product->product_image;
+        
         if ($request->hasFile('product_image')) {
             $extension = $request->file('product_image')->extension();
             $newFileName = "PRODUCT_".time().".".$extension;

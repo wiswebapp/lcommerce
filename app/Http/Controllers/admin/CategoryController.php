@@ -4,6 +4,8 @@ namespace App\Http\Controllers\admin;
 
 use App\Category;
 use App\Http\Controllers\Controller;
+use App\Http\Requests\CreateCategory;
+use App\Http\Requests\CreateSubCategory;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\Request;
 
@@ -30,12 +32,8 @@ class CategoryController extends Controller
         return view('admin.category.category_action')->with('data',$data);
     }
     
-    public function store_category(Request $request){
+    public function store_category(CreateCategory $request){
         abort_unless($this->checkPermission('Create Category'), 403);
-        $request->validate([
-            'category_name' => 'required|max:255',
-            'status' => 'required',
-        ]);
         $category = new Category;
         $category->category_name = $request->input('category_name');
         $category->status = $request->input('status');
@@ -51,12 +49,8 @@ class CategoryController extends Controller
         return view('admin.category.category_action')->with('data',$data);
     }
 
-    public function update_category($id,Request $request){
+    public function update_category($id, CreateCategory $request){
         abort_unless($this->checkPermission('Edit Category'), 403);
-        $request->validate([
-            'category_name' => 'required|max:255',
-            'status' => 'required',
-        ]);
         $category = Category::find($id);
         $category->category_name = $request->input('category_name');
         $category->status = $request->input('status');
@@ -93,13 +87,8 @@ class CategoryController extends Controller
         $data['pageData']['category'] = Category::where(['status' => 'Active', ['parent_id','=',0]])->orderBy('id', 'desc')->get();
         return view('admin.category.subcategory_action')->with('data',$data);
     }
-    public function store_subcategory(Request $request){
+    public function store_subcategory(CreateSubCategory $request){
         abort_unless($this->checkPermission('Create SubCategory'), 403);
-        $request->validate([
-            'parent_id' => 'required|integer',
-            'category_name' => 'required|max:255',
-            'status' => 'required',
-        ]);
         $category = new Category();
         $input = $request->all();
         $category::create($input);
@@ -114,13 +103,8 @@ class CategoryController extends Controller
         $data['pageData']['category'] = Category::where([['parent_id','=',0]])->orderBy('id', 'desc')->get();
         return view('admin.category.subcategory_action')->with('data',$data);
     }
-    public function update_subcategory($id,Request $request){
+    public function update_subcategory($id, CreateSubCategory $request){
         abort_unless($this->checkPermission('Edit SubCategory'), 403);
-        $request->validate([
-            'parent_id' => 'required|integer',
-            'category_name' => 'required|max:255',
-            'status' => 'required',
-        ]);
         $category = Category::find($id);
         $input = $request->all();
         $category->fill($input)->save();

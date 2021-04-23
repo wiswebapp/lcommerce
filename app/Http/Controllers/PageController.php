@@ -6,7 +6,6 @@ use App\Pages;
 
 class PageController extends Controller
 {
-    
     public function __invoke($page)
     {
         if($page == "about"){ $data = Pages::find(1);}

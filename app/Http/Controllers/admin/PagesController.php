@@ -4,6 +4,7 @@ namespace App\Http\Controllers\admin;
 use App\Pages;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use App\Http\Requests\CreatePages;
 use Illuminate\Support\Facades\Storage;
 
 class PagesController extends Controller
@@ -31,18 +32,11 @@ class PagesController extends Controller
         return view('admin.pages.pages_action')->with('data', $data);
     }
 
-    public function store_pages (Request $request)
+    public function store_pages (CreatePages $request)
     {
         abort_unless($this->checkPermission('Create Pages'), 403);
-        $request->validate([
-            'page_title' => 'required',
-            'page_description' => 'required',
-            'page_meta_keyword' => 'required',
-            'page_meta_description' => 'required',
-            'status' => 'required',
-        ]);
-        //Uploading Image
         $newFileName = "";
+
         if ($request->hasFile('page_image')) {
             $extension = $request->file('page_image')->extension();
             $newFileName = "PAGES_".time().".".$extension;
@@ -69,18 +63,11 @@ class PagesController extends Controller
         return view('admin.pages.pages_action')->with('data', $data);
     }
 
-    public function update_pages($id, Request $request)
+    public function update_pages($id, CreatePages $request)
     {
         abort_unless($this->checkPermission('Edit Pages'), 403);
-        $request->validate([
-            'page_title' => 'required',
-            'page_description' => 'required',
-            'page_meta_keyword' => 'required',
-            'page_meta_description' => 'required',
-            'status' => 'required',
-        ]);
         $pages = Pages::find($id);
-        //Uploading Image
+
         $newFileName = $pages->page_image;
         if ($request->hasFile('page_image')) {
             $extension = $request->file('page_image')->extension();
